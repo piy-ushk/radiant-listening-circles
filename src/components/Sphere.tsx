@@ -78,22 +78,18 @@ const Sphere = ({ position, radius, baseIntensity, audioLevel, delay }: SpherePr
     }
   });
 
-  // Convert spring values to properly typed values for Three.js
-  const currentColor = color.to(c => new THREE.Color(c)); 
-  const currentScale = scale.to(s => s);
-
   return (
     <animated.mesh 
       ref={meshRef} 
       position={position} 
-      scale={currentScale}
+      scale={scale}
     >
       <sphereGeometry args={[radius, 32, 16]} />
       <animated.meshStandardMaterial
         ref={materialRef}
         roughness={0.3}
         metalness={0.2}
-        emissive={currentColor}
+        emissive={color}
         emissiveIntensity={intensity}
         toneMapped={false}
         color="#ffffff"
