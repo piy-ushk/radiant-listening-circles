@@ -34,6 +34,9 @@ const Index = () => {
           />
         </EffectComposer>
       </Canvas>
+      <div className="absolute top-6 left-0 w-full text-center text-white/70 text-xl">
+        Almost there...
+      </div>
     </div>
   );
 };
