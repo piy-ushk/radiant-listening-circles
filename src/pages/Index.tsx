@@ -25,12 +25,13 @@ const Index = () => {
   return (
     <div className="h-screen w-screen" style={{ background: "#1C1D20" }}>
       <Canvas orthographic camera={{ position: [0, 0, 200], zoom: 1 }}>
+        <color attach="background" args={["#1C1D20"]} />
         <RingController audioLevels={audioLevels} />
         <EffectComposer>
           <Bloom 
-            luminanceThreshold={0.2} 
+            luminanceThreshold={0.1} 
             luminanceSmoothing={0.9} 
-            intensity={0.8} 
+            intensity={1.2} 
           />
         </EffectComposer>
       </Canvas>

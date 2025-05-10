@@ -93,14 +93,15 @@ const Sphere = ({ position, radius, baseIntensity, audioLevel, delay }: SpherePr
 
   return (
     <animated.mesh ref={meshRef} position={position} scale={springs.scale}>
-      <sphereGeometry args={[radius, 32, 32]} />
+      <sphereGeometry args={[radius, 32, 16]} />
       <animated.meshStandardMaterial
         ref={materialRef}
-        roughness={1}
-        metalness={0}
+        roughness={0.3}
+        metalness={0.2}
         emissive={springs.color}
         emissiveIntensity={springs.intensity}
         toneMapped={false}
+        color="#ffffff"
       />
     </animated.mesh>
   );
