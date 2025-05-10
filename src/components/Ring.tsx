@@ -1,7 +1,6 @@
 
-import { useMemo, useRef } from "react";
+import { useMemo } from "react";
 import * as THREE from "three";
-import { useSpring, animated } from "@react-spring/three";
 import Sphere from "./Sphere";
 
 interface RingProps {
@@ -52,7 +51,7 @@ const Ring = ({
   }, [count, radius, radialJitter, tangentialJitter, angleOffset]);
 
   return (
-    <group>
+    <>
       {positions.map((pos, i) => (
         <Sphere
           key={i}
@@ -63,7 +62,7 @@ const Ring = ({
           delay={pos.delay}
         />
       ))}
-    </group>
+    </>
   );
 };
 

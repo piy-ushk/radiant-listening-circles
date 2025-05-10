@@ -3,7 +3,6 @@ import { useRef, useEffect } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { useSpring, animated } from "@react-spring/three";
-import { MeshDistortMaterial } from "@react-three/drei";
 
 interface SphereProps {
   position: [number, number, number];

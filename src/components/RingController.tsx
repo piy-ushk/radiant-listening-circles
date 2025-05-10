@@ -1,7 +1,6 @@
 
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { useSpring, animated } from "@react-spring/three";
 import * as THREE from "three";
 import { useMemo } from "react";
 import Ring from "./Ring";
