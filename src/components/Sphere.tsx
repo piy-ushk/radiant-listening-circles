@@ -32,42 +32,29 @@ const Sphere = ({ position, radius, baseIntensity, audioLevel, delay }: SpherePr
   const targetColor = audioLevel >= 0.5 ? ACTIVE_COLOR_HIGH : ACTIVE_COLOR_LOW;
   
   // Springs for animations
-  const [springs, api] = useSpring(() => ({
-    scale: 1,
-    intensity: baseIntensity,
-    color: IDLE_COLOR,
+  const { scale, intensity, color } = useSpring({
+    scale: audioLevel > 0.2 ? 1.2 : 1,
+    intensity: audioLevel > 0.2 ? baseIntensity * 1.5 : baseIntensity,
+    color: audioLevel > 0.2 ? targetColor : IDLE_COLOR,
+    delay: audioLevel > 0.2 ? delay * 1000 : 0,
     config: { tension: 120, friction: 14 }
-  }));
+  });
 
-  // Check if audio level changed significantly to trigger animation
+  // Effect to handle audio level changes
   useEffect(() => {
     if (audioLevel > 0.2) {
-      // Trigger active state with the specified delay
-      setTimeout(() => {
-        timeRef.current.active = true;
-        timeRef.current.triggerTime = 0;
-        
-        // Animate to active color and scale
-        api.start({
-          scale: 1.2,
-          intensity: baseIntensity * 1.5,
-          color: targetColor,
-          delay: delay * 1000,
-        });
-        
-        // Schedule reset to idle state
-        setTimeout(() => {
-          api.start({
-            scale: 1,
-            intensity: baseIntensity,
-            color: IDLE_COLOR,
-            delay: 700, // Hold + fade back
-          });
-          timeRef.current.active = false;
-        }, 700 + delay * 1000); // Active duration + delay
-      }, delay * 1000);
+      // Mark as active
+      timeRef.current.active = true;
+      timeRef.current.triggerTime = 0;
+      
+      // Schedule reset to idle state
+      const resetTimer = setTimeout(() => {
+        timeRef.current.active = false;
+      }, 700 + delay * 1000); // Active duration + delay
+      
+      return () => clearTimeout(resetTimer);
     }
-  }, [audioLevel, api, baseIntensity, targetColor, delay]);
+  }, [audioLevel, delay]);
 
   // Idle animation loop
   useFrame((_state, delta) => {
@@ -91,19 +78,27 @@ const Sphere = ({ position, radius, baseIntensity, audioLevel, delay }: SpherePr
     }
   });
 
+  // Convert spring values to properly typed values for Three.js
+  const currentColor = color.to(c => new THREE.Color(c)); 
+  const currentScale = scale.to(s => s);
+
   return (
-    <mesh ref={meshRef} position={position} scale={1}>
+    <animated.mesh 
+      ref={meshRef} 
+      position={position} 
+      scale={currentScale}
+    >
       <sphereGeometry args={[radius, 32, 16]} />
-      <meshStandardMaterial
+      <animated.meshStandardMaterial
         ref={materialRef}
         roughness={0.3}
         metalness={0.2}
-        emissive={springs.color}
-        emissiveIntensity={springs.intensity}
+        emissive={currentColor}
+        emissiveIntensity={intensity}
         toneMapped={false}
         color="#ffffff"
       />
-    </mesh>
+    </animated.mesh>
   );
 };
 
